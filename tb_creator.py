@@ -42,17 +42,17 @@ class tesbench_creator:
     def find_module(self):
         content = self.extract_info()
 
-        for string_module in content:
+        for i in content:
 
-            ''''''
-            pattern_module = re.search('module\s(.*)', content)
+        
+            pattern_module = re.search('module\s(.*)', i)
             string_module = pattern_module.group(1)
 
 
             pattern_module_2 = re.search("(.*)\s*\((.*?)\)", string_module)
             module_name = pattern_module_2.group(1)
             ports = pattern_module_2.group(2)
-            print(ports)'''
+            print(ports)
 
 
 if __name__ == "__main__":
