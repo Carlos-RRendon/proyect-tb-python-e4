@@ -42,9 +42,8 @@ class tesbench_creator:
     def find_module(self):
         content = self.extract_info()
 
-        for i in content:
-
-        
+        for i in content :
+            
             pattern_module = re.search('module\s(.*)', i)
             string_module = pattern_module.group(1)
 
@@ -52,7 +51,11 @@ class tesbench_creator:
             pattern_module_2 = re.search("(.*)\s*\((.*?)\)", string_module)
             module_name = pattern_module_2.group(1)
             ports = pattern_module_2.group(2)
-            print(ports)
+            
+            if pattern_module :
+                break
+            else :
+                print("No es posible instanciar, falta el nombre del modulo")
 
 
 if __name__ == "__main__":
