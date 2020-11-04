@@ -53,9 +53,12 @@ class tesbench_creator:
             ports = pattern_module_2.group(2)
             
             if pattern_module :
+                print(module_name)
+                print(ports)
                 break
             else :
                 print("No es posible instanciar, falta el nombre del modulo")
+                break
 
 
 if __name__ == "__main__":
