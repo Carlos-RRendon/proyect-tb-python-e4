@@ -17,9 +17,6 @@ class tesbench_creator:
         f = open(self.path, 'r')
         content = f.read()
 
-        '''pattern_module = re.search('module\s(.*)', content)
-        string_module = pattern_module.group(1)'''
-
         # Quita los saltos de linea
         content = content.replace("\n", " ")
         f.close()
@@ -41,7 +38,6 @@ class tesbench_creator:
 
                 data_clean.append(line)
 
-        print(data_clean)
         return data_clean
 
     def find_module(self):
@@ -61,11 +57,14 @@ class tesbench_creator:
                 print("No se encontro nombre del modulo")
                 break
 
+    def find_inputs(self):
+        content = self.extract_info()
 
-    def create_tb(self):
-        print()
-        '''self.find_module()
-        print(self.elements['module'])'''
+        for i in content:
+
+            print(f"List element data clean:  {i}")
+
+
 
 
 if __name__ == "__main__":
