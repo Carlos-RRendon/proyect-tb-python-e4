@@ -76,5 +76,5 @@ if __name__ == "__main__":
     for file in files:
         creator = tesbench_creator(file)
         print("This file is: ", file)
-        creator.find_module()
+        creator.find_inputs()
         print("\n")
