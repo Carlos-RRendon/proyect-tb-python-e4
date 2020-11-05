@@ -71,7 +71,7 @@ class tesbench_creator:
 if __name__ == "__main__":
 
     files = [
-        "design.sv", "design1.sv","prueba.sv"
+        "design.sv", "design1.sv", "regex_breaker.sv"
     ]
 
     for file in files:
