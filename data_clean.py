@@ -63,6 +63,35 @@ class tesbench_creator:
 
     def find_inputs(self):
         content = self.extract_info()
+        
+        
+        #
+        string_aux = " ".join(content)
+        result_search_aux = re.findall("\W*((input)\s*(\[\d+:\d+\]\s*|\s+)\s*(((,\s*|\s*)((?!input|output|inout)[_a-zA-Z]\w*\s*))*))", string_aux)
+
+        inputs = []
+        for i in range(len(result_search_aux)) :
+            string_raw_inputs = result_search_aux[i][0].replace("input", "")
+            string_input_aux_2 = re.search("^\[(.*?)\]", string_raw_inputs)
+            if string_input_aux_2 :
+                input_bus_width = string_input_aux_2.group(0);
+                string_input_aux_3 = string_raw_inputs.replace(input_bus_width, "")
+                string_input_aux_3 = string_input_aux_3.replace(" ", "")
+
+
+
+
+
+                inputs.append(input_bus_width)
+
+
+
+                
+                
+
+
+
+
 
 
         for i in content:
@@ -84,7 +113,7 @@ class tesbench_creator:
 if __name__ == "__main__":
 
     files = [
-        "design.sv", "design1.sv", "prueba.sv", "regex_breaker.sv", "prueba2.sv"
+        "regex_breaker.sv"
     ]
 
 

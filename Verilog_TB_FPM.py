@@ -48,7 +48,7 @@ class tesbench_creator:
             string_raw = result_search[0]
         
         if (result_search) :
-            result_search_aux = re.findall(\
+            result_search_aux = re.search(\
             "\W*((input)\s*(\[\d+:\d+\]\s*|\s+)\s*(((,\s*|\s*)((?!input|output|inout)[_a-zA-Z]\w*\s*))*))", \
                 string_raw)
 
