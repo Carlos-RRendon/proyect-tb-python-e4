@@ -28,15 +28,18 @@ class tesbench_creator:
 
         self.abrir_archivo()
 
-        pattern = 'module|input|output|inout'
+        pattern = '(module.*\(.*\)|input.*|output.*|inout.*)'
         data_clean = []
 
         self.content = self.content.split(";")
 
         for line in self.content:
-            if re.search(pattern, line):
 
-                data_clean.append(line)
+            match = re.search(pattern, line)
+
+            if match:
+                data = match.group(1)
+                data_clean.append(data)
 
         return data_clean
 
@@ -45,14 +48,15 @@ class tesbench_creator:
 
         for i in content:
 
-            pattern_module = re.search('((module)+\s+\w+)', i)
+            pattern_module = re.search('module\s+([a-zA-Z]\w*)', i)
+
             if pattern_module:
 
                 string_module = pattern_module.group(1)
-                pattern_module2 = re.search("module\s+([a-zA-Z]\w*)",string_module)
-                module_name = pattern_module2.group(1)
-                print(module_name)
+                print(string_module)
+                self.elements['module'] = string_module
                 break
+
             else:
                 print("No se encontro nombre del modulo")
                 break
@@ -60,21 +64,33 @@ class tesbench_creator:
     def find_inputs(self):
         content = self.extract_info()
 
+
         for i in content:
-
+            input_regex= r'(input.*?)(output|\))'
             print(f"List element data clean:  {i}")
-
+            pattern_input = re.search(input_regex,i)
+            if pattern_input:
+                string_input = pattern_input.group(1)
+                print(string_input)
+            else:
+                input_regex = r'(input.*)'
+                pattern_input = re.search(input_regex,i)
+                if pattern_input:
+                    string_input = pattern_input.group(1)
+                    print(string_input)
 
 
 
 if __name__ == "__main__":
 
     files = [
-        "design.sv", "design1.sv", "regex_breaker.sv"
+        "design.sv", "design1.sv", "prueba.sv", "regex_breaker.sv", "prueba2.sv"
     ]
+
 
     for file in files:
         creator = tesbench_creator(file)
         print("This file is: ", file)
         creator.find_inputs()
         print("\n")
+
