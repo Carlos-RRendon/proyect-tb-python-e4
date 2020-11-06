@@ -6,7 +6,9 @@
 `include "alu_control.sv"
  
 
-module Top_Module(clk, input rst,out_G);
+module Top_Module(
+          intput clk, rst,
+          inout out_G);
   input clk, rst;
   output reg [31:0] out_G;
   wire [31:0] in_pc_w1, out_pc_w2,out_im_w3,out_rb_w4,out_rb_w5,out_aluc_w6,out_alu_w7;

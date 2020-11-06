@@ -12,12 +12,16 @@ class tesbench_creator:
         f = open(self.path, 'r')
         content = f.read()        
 
-        pattern_module = re.search("module\s+([a-zA-Z]\w*)", content)
+        pattern_module = re.search("module\s+(\w*)", content)
         module_name = pattern_module.group(1)
+
+        pattern_module = re.search("\W*((input|output|inout)\s*(\[\d+:\d+\]\s*|\s+)\s*(((,\s*|\s*)((?!input|output|inout)[_a-zA-Z]\w*\s*))*))", content)
+        name = pattern_module.group(1)
+        name2 = pattern_module.group(2)
+        
                
-        # pattern_module_2 = re.search("(.*)\s*\((.*?)\)", string_module)
-        pattern_module = re.search("((.*?)\)", content)
-        ports = pattern_module.group(2)
+        # pattern_module = re.search("(.*)", content)
+        # ports = pattern_module.group(1)
 
 
         print("hola")

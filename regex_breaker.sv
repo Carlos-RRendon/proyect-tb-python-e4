@@ -7,7 +7,14 @@
 `include "aluC_des.sv"
 `include "div_des.sv"
 
-module TOP #(parameter a1=8,parameter qw=9) (clk_T, data_rd_T,input[5:0] in1, in2 ,input h2, output jjh);
+module TOP #(parameter a1=8,	parameter qw=9 , 
+             parameter f5 = 10)(clk_T, data_rd_T,input[5:0] in1, in2 ,
+                                 input h2, 
+                                output jjh);
+
+//module TOP (clk_T, data_rd_T,input[5:0] in1, in2 ,
+//                                input h2, 
+//                                output jjh);
   
   //wire [5:0] func_cod_T;
   //wire [1:0] func_T;
