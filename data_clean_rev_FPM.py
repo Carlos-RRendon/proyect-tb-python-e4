@@ -171,7 +171,7 @@ class tesbench_creator:
 if __name__ == "__main__":
 
     files = [
-        "regex_breaker.sv"
+        "regex_breaker_rev_FPM.sv"
     ]
 
 
