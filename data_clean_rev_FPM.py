@@ -150,59 +150,6 @@ class tesbench_creator:
 
         self.elements["outputs"] = outputs
 
-                        # INOUTS
-        # ======================================================================================
-        # ======================================================================================
-
-        '''result_search_aux = re.findall("\W*((inout)\s*(reg|\s*)\\s*(\[\d+:\d+\]\s*|\s+)\s*(((,\s*|\s*)((?!input|output|inout)[_a-zA-Z]\w*\s*))*))", string_aux)
-
-        inout = []
-        for i in range(len(result_search_aux)) :
-            string_raw_inout = result_search_aux[i][0].replace("inout", "")
-            string_raw_inout = string_raw_inout.replace("inout", "")
-            string_inout_aux_2 = re.search("(^|\s+)\[(.*?)\]", string_raw_inout)
-            if string_inout_aux_2 :
-                inout_bus_width = string_inout_aux_2.group(0);
-                inout_bus_width = inout_bus_width.replace(" ", "")
-                string_inout_aux_3 = string_raw_output.replace(output_bus_width, "")
-                string_inout_aux_4 = re.findall("\s+(\w*)", string_output_aux_3)
-                if string_output_aux_4 :
-                    for j in range(len(string_output_aux_4)) :
-                        if (not (string_output_aux_4[j] in dict(outputs))) and (string_output_aux_4[j]):
-                            outputs.append(tuple((string_output_aux_4[j], output_bus_width)))
-                else :
-                    string_output_aux_3 = string_output_aux_3.replace(" ", "")
-                    if (not (string_output_aux_3 in dict(outputs))) and (string_output_aux_3):
-                        outputs.append(tuple((string_output_aux_3, output_bus_width)))
-            
-            else :
-                output_bus_width = tuple();
-                string_output_aux_3 = re.findall("\s+(\w*)", string_raw_output)
-                if string_output_aux_3 : 
-                    for j in range(len(string_output_aux_3)) :
-                        if (not (string_output_aux_3[j] in dict(outputs))) and (string_output_aux_3[j]):
-                            outputs.append(tuple((string_output_aux_3[j], output_bus_width)))
-                else :         
-                    string_output_aux_3 = string_raw_output.replace(" ", "")
-                    if (not (string_output_aux_3 in dict(outputs))) and (string_output_aux_3) :
-                        outputs.append(tuple((string_output_aux_3, output_bus_width)))  
-            
-
-
-        for i in content:
-            input_regex= r'(input.*?)(output|\))'
-            print(f"List element data clean:  {i}")
-            pattern_input = re.search(input_regex,i)
-            if pattern_input:
-                string_input = pattern_input.group(1)
-                print(string_input)
-            else:
-                input_regex = r'(input.*)'
-                pattern_input = re.search(input_regex,i)
-                if pattern_input:
-                    string_input = pattern_input.group(1)
-                    print(string_input)
-'''
 
     def tc_create(self):
 
@@ -213,7 +160,7 @@ class tesbench_creator:
         import os
         name = os.path.splitext(self.path)
         new_name = name[0] + "_tb" + name[1]
-
+        inst_name = "UUT"
         f = open(new_name,"w")
 
         for key in self.elements.keys():
@@ -222,34 +169,62 @@ class tesbench_creator:
                 tb_module_name = self.elements[key] + "_tb;\n"
                 print(tb_module_name)
                 f.write(tb_module_name)
+                connect_ports = f'\n{self.elements[key]} {inst_name} (\n'
+                print(connect_ports)
 
             if key == "inputs":
 
                 for input in self.elements[key]:
 
+
                     if input[1] != ():
                         tb_in_name = f'reg {input[1]} {input[0]}_tb;\n'
                         print(tb_in_name)
                         f.write(tb_in_name)
+                        connect_ports = connect_ports + f'.{input[0]} ({input[0]}_tb),\n'
+
 
                     else:
                         tb_in_name = f'reg {input[0]}_tb;\n'
                         print(tb_in_name)
                         f.write(tb_in_name)
+                        connect_ports = connect_ports + f'.{input[0]} ({input[0]}_tb),\n'
+
 
             if key == "outputs":
 
+                flag = len(self.elements[key])
+                last_element = self.elements[key][flag-1]
+
                 for output in self.elements[key]:
 
-                    if output[1] != ():
-                        tb_out_name = f'wire {output[1]} {output[0]}_tb;\n'
-                        print(tb_out_name)
-                        f.write(tb_out_name)
+                    if output != last_element:
+
+
+                        if output[1] != ():
+                            tb_out_name = f'wire {output[1]} {output[0]}_tb;\n'
+                            print(tb_out_name)
+                            f.write(tb_out_name)
+                            connect_ports = connect_ports + f'.{output[0]} ({output[0]}_tb),\n'
+
+
+                        else:
+                            tb_out_name = f'wire {output[0]}_tb;\n'
+                            print(tb_out_name)
+                            f.write(tb_out_name)
+                            connect_ports = connect_ports + f'.{output[0]} ({output[0]}_tb),\n'
 
                     else:
                         tb_out_name = f'wire {output[0]}_tb;\n'
                         print(tb_out_name)
                         f.write(tb_out_name)
+                        connect_ports = connect_ports + f'.{output[0]} ({output[0]}_tb)\n);'
+                        connect_ports = f'{connect_ports}\ninitial\nbegin\nend\n'
+
+
+
+                f.write(connect_ports+"\n")
+                f.write("\nendmodule")
 
         f.close()
 
