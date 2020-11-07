@@ -9,8 +9,13 @@
 
 module TOP #(parameter a1=8,	parameter qw=9 , 
              parameter f5 = 10)(clk_T, data_rd_T,input[5:0] in1, in2 ,
-                                 input h2, 
-                                output jjh);
+                                 input h2,
+                                 input f9, jk, 
+                                 j99, 
+                                 d877, 
+                                 output wrr_898
+                                 input [31:0] bus_A
+                                output reg jjh);
 
 //module TOP (clk_T, data_rd_T,input[5:0] in1, in2 ,
 //                                input h2, 
@@ -19,7 +24,10 @@ module TOP #(parameter a1=8,	parameter qw=9 ,
   //wire [5:0] func_cod_T;
   //wire [1:0] func_T;
   input [6:0] clk_T;
-  output [31:0] data_rd_T;
+  input j99;
+  output reg [63:0] d877
+  output reg [31:0] data_rd_T, f459_87;
+  input [15:0] Bus_B;
   
   wire [31:0] PCResult_T;
   wire [31:0] PCNext_T; 
