@@ -15,7 +15,8 @@ module TOP #(parameter a1=8,	parameter qw=9 ,
                                  d877, 
                                  output wrr_898
                                  input [31:0] bus_A
-                                output reg jjh);
+                                output reg jjh,
+                                bidir);
 
 //module TOP (clk_T, data_rd_T,input[5:0] in1, in2 ,
 //                                input h2, 
@@ -23,6 +24,7 @@ module TOP #(parameter a1=8,	parameter qw=9 ,
   
   //wire [5:0] func_cod_T;
   //wire [1:0] func_T;
+  output   [7:0] bidir;
   input [6:0] clk_T;
   input j99;
   output reg [63:0] d877

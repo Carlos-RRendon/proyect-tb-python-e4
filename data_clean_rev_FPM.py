@@ -142,6 +142,42 @@ class tesbench_creator:
                         outputs.append(tuple((string_output_aux_3, output_bus_width)))              
 
 
+        # INOUTS
+        # ======================================================================================
+        # ======================================================================================
+        
+        result_search_aux = re.findall("\W*((inout)\s*(reg|\s*)\\s*(\[\d+:\d+\]\s*|\s+)\s*(((,\s*|\s*)((?!input|output|inout)[_a-zA-Z]\w*\s*))*))", string_aux)
+
+        inout = []
+        for i in range(len(result_search_aux)) :
+            string_raw_inout = result_search_aux[i][0].replace("inout", "")
+            string_raw_inout = string_raw_inout.replace("inout", "")
+            string_inout_aux_2 = re.search("(^|\s+)\[(.*?)\]", string_raw_inout)
+            if string_inout_aux_2 :
+                inout_bus_width = string_inout_aux_2.group(0);
+                inout_bus_width = inout_bus_width.replace(" ", "")
+                string_inout_aux_3 = string_raw_output.replace(output_bus_width, "")
+                string_inout_aux_4 = re.findall("\s+(\w*)", string_output_aux_3)
+                if string_output_aux_4 :
+                    for j in range(len(string_output_aux_4)) :
+                        if (not (string_output_aux_4[j] in dict(outputs))) and (string_output_aux_4[j]):
+                            outputs.append(tuple((string_output_aux_4[j], output_bus_width)))
+                else :
+                    string_output_aux_3 = string_output_aux_3.replace(" ", "")
+                    if (not (string_output_aux_3 in dict(outputs))) and (string_output_aux_3):
+                        outputs.append(tuple((string_output_aux_3, output_bus_width)))
+            
+            else :
+                output_bus_width = tuple();
+                string_output_aux_3 = re.findall("\s+(\w*)", string_raw_output)
+                if string_output_aux_3 : 
+                    for j in range(len(string_output_aux_3)) :
+                        if (not (string_output_aux_3[j] in dict(outputs))) and (string_output_aux_3[j]):
+                            outputs.append(tuple((string_output_aux_3[j], output_bus_width)))
+                else :         
+                    string_output_aux_3 = string_raw_output.replace(" ", "")
+                    if (not (string_output_aux_3 in dict(outputs))) and (string_output_aux_3) :
+                        outputs.append(tuple((string_output_aux_3, output_bus_width)))  
 
 
                 
