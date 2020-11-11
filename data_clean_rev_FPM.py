@@ -358,13 +358,10 @@ if __name__ == "__main__":
     for file in files:
         creator = tesbench_creator(file)
         print("This file is: ", file)
-<<<<<<< HEAD
-        creator.find_outputs()
-        creator.clock_signal()
-        creator.reset_signal()
-        creator.vector_signals()
-=======
+
+
+
         creator.tb_create()
         print('\n')
->>>>>>> fdb1315d21ca0368790e377d5cfe561625eea675
+
         
