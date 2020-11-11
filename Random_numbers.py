@@ -4,7 +4,7 @@ import re
 import string
 import random
 
-bus_width = int(32)
+bus_width = int(8) 
 bus_range = 2 ** bus_width
 random_number = random.randint(0, (bus_range - 1))
 

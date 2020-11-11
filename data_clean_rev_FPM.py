@@ -164,8 +164,13 @@ class tesbench_creator:
         self.find_inputs()
         inputs = self.elements["inputs"]
 
-        user_format = int(input("Elija el formato de los números (1 decimal), (2 binario), (3 hexadecimal): "))
+        inputs = (list(filter(lambda x: x[0] != "clk", inputs)))
+        inputs = (list(filter(lambda x: x[0] != "clock", inputs)))
+        inputs = (list(filter(lambda x: x[0] != "rst", inputs)))
+        inputs = (list(filter(lambda x: x[0] != "reset", inputs)))
 
+
+        user_format = int(input("Elija el formato de los números (1 decimal), (2 binario), (3 hexadecimal): "))
 
         inputs_vector = []
         for j in inputs:
@@ -192,7 +197,6 @@ class tesbench_creator:
 
                 dec_string = f"{j[0]} = {bus_width}{prefix}{random_number}"
                 inputs_vector.append(dec_string)
-                print(inputs_vector)
 
             else :
 
@@ -211,12 +215,40 @@ class tesbench_creator:
                 # Decimal
                 dec_string = f"{j[0]} = 1{prefix}{random_number}"
                 inputs_vector.append(dec_string)
-                print(inputs_vector)
+
+
+        return(inputs_vector)
 
 
 
+    def clock_signal(self):
+        self.find_inputs()
+        clock = self.elements["inputs"]  
 
-        
+        clock = (list(filter(lambda x: x[0] == "clock", clock)))
+        if not clock :
+            clock = self.elements["inputs"]
+            clock = (list(filter(lambda x: x[0] == "clk", clock)))
+            clock = clock[0][0]
+        else : 
+            clock = clock[0][0]
+
+        return(clock)   
+
+
+    def reset_signal(self):
+        self.find_inputs()
+        reset = self.elements["inputs"]  
+
+        reset = (list(filter(lambda x: x[0] == "reset", reset)))
+        if not reset :
+            reset = self.elements["inputs"]
+            reset = (list(filter(lambda x: x[0] == "reset", reset)))
+            reset = reset[0][0]
+        else : 
+            reset = reset[0][0]
+
+        return(reset)  
 
 
 
@@ -308,5 +340,7 @@ if __name__ == "__main__":
     for file in files:
         creator = tesbench_creator(file)
         print("This file is: ", file)
+        creator.clock_signal()
+        creator.reset_signal()
         creator.vector_signals()
-        print("\n")
+        

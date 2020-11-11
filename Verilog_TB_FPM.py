@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import re
 import string
+import random
 
 class tesbench_creator:
 
