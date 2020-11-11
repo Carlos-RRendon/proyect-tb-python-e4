@@ -340,6 +340,7 @@ if __name__ == "__main__":
     for file in files:
         creator = tesbench_creator(file)
         print("This file is: ", file)
+        creator.find_outputs()
         creator.clock_signal()
         creator.reset_signal()
         creator.vector_signals()
