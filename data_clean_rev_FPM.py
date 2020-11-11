@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import re
+import random
 
 
 class tesbench_creator:
@@ -19,8 +20,12 @@ class tesbench_creator:
         f = open(self.path, 'r')
         content = f.read()
 
+        # Quita los commentarios
+        content = re.sub("\/.*", "", content)
+        
         # Quita los saltos de linea
         content = content.replace("\n", " ")
+
         f.close()
 
         # Actualiza el atributo content
@@ -71,15 +76,17 @@ class tesbench_creator:
         # ======================================================================================
 
         string_aux = " ".join(content)
+        
         result_search_aux = re.findall(
-            "\W*((input)\s*(\[\d+:\d+\]\s*|\s+)\s*(((,\s*|\s*)((?!input|output|inout)[_a-zA-Z]\w*\s*))*))", string_aux)
+            "\W*((input)\s*(\[\d+:\d+\]\s*|\s+)\s*(((,\s*|\s*)((?!input |output |inout )[_a-zA-Z]\w*\s*))*))", string_aux)
 
         inputs = []
         for i in range(len(result_search_aux)):
             string_raw_inputs = result_search_aux[i][0].replace("input", "")
+            string_raw_inputs = string_raw_inputs.replace(" module ", "")
             string_input_aux_2 = re.search("(^|\s+)\[(.*?)\]", string_raw_inputs)
             if string_input_aux_2:
-                input_bus_width = string_input_aux_2.group(0);
+                input_bus_width = string_input_aux_2.group(0)
                 input_bus_width = input_bus_width.replace(" ", "")
                 string_input_aux_3 = string_raw_inputs.replace(input_bus_width, "")
                 # string_input_aux_4 = re.findall("([_a-z0-9-]+)(?:,|\s)", string_input_aux_3)
@@ -94,7 +101,7 @@ class tesbench_creator:
                         inputs.append(tuple((string_input_aux_3, input_bus_width)))
 
             else:
-                input_bus_width = tuple();
+                input_bus_width = tuple()
                 string_input_aux_3 = re.findall("\s+(\w*)", string_raw_inputs)
                 if string_input_aux_3:
                     for j in range(len(string_input_aux_3)):
@@ -114,16 +121,18 @@ class tesbench_creator:
         content = self.data_clean
         string_aux = " ".join(content)
         result_search_aux = re.findall(
-            "\W*((output)\s*(reg|\s*)\\s*(\[\d+:\d+\]\s*|\s+)\s*(((,\s*|\s*)((?!input|output|inout)[_a-zA-Z]\w*\s*))*))",
+            "\W*((output)\s*(logic|reg|\s*)\s*(\[\d+:\d+\]\s*|\s+)\s*(((,\s*|\s*)((?!input |output |inout |logic )[_a-zA-Z]\w*\s*))*))",
             string_aux)
 
         outputs = []
         for i in range(len(result_search_aux)):
             string_raw_output = result_search_aux[i][0].replace("output", "")
             string_raw_output = string_raw_output.replace("reg", "")
+            string_raw_output = string_raw_output.replace("logic", "")
+            string_raw_output = string_raw_output.replace("module", "")
             string_output_aux_2 = re.search("(^|\s+)\[(.*?)\]", string_raw_output)
             if string_output_aux_2:
-                output_bus_width = string_output_aux_2.group(0);
+                output_bus_width = string_output_aux_2.group(0)
                 output_bus_width = output_bus_width.replace(" ", "")
                 string_output_aux_3 = string_raw_output.replace(output_bus_width, "")
                 string_output_aux_4 = re.findall("\s+(\w*)", string_output_aux_3)
@@ -137,7 +146,7 @@ class tesbench_creator:
                         outputs.append(tuple((string_output_aux_3, output_bus_width)))
 
             else:
-                output_bus_width = tuple();
+                output_bus_width = tuple()
                 string_output_aux_3 = re.findall("\s+(\w*)", string_raw_output)
                 if string_output_aux_3:
                     for j in range(len(string_output_aux_3)):
@@ -149,6 +158,47 @@ class tesbench_creator:
                         outputs.append(tuple((string_output_aux_3, output_bus_width)))
 
         self.elements["outputs"] = outputs
+
+
+    def vector_signals(self):
+        self.find_inputs()
+        inputs = self.elements["inputs"]
+
+        user_format = int(input("Elija el formato de los números (1 decimal), (2 binario), (3 hexadecimal), (4 octal): "))
+
+
+        inputs_vector = []
+        for j in inputs:
+
+            if j[1] != () :
+                result_search_aux = re.search("\[\s*([\d]*)\s*\W*(\d*)", j[1])
+                element_1 = int(result_search_aux.group(1))
+                element_2 = int(result_search_aux.group(2))
+         
+                bus_width = ((element_1 - element_2) + 1)
+                bus_range = 2 ** bus_width
+                random_number = random.randint(0, (bus_range - 1))
+
+                if user_format = 1 :
+                    # Decimal
+                    dec_string = f"{j[0]} = {bus_width}'d{random_number}"
+                    inputs_vector.append(dec_string)
+
+            else :
+
+                if user_format = 1 
+                random_number = random.randint(0, 1)
+
+                # Decimal
+                dec_string = f"{j[0]} = 1'd{random_number}"
+                inputs_vector.append(dec_string)
+
+
+
+
+        
+
+
 
 
     def tc_create(self):
@@ -238,5 +288,5 @@ if __name__ == "__main__":
     for file in files:
         creator = tesbench_creator(file)
         print("This file is: ", file)
-        creator.tc_create()
+        creator.vector_signals()
         print("\n")
