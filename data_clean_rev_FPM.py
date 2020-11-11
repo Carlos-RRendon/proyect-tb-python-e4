@@ -11,7 +11,9 @@ class tesbench_creator:
         self.elements = {
             'module': None,
             'inputs': None,
-            'outputs': None
+            'outputs': None,
+            'clk' : None,
+            'rst' : None
         }
         self.abrir_archivo()
         self.data_clean = self.extract_info()
@@ -159,9 +161,8 @@ class tesbench_creator:
 
         self.elements["outputs"] = outputs
 
-
     def vector_signals(self):
-        self.find_inputs()
+        #self.find_inputs()
         inputs = self.elements["inputs"]
 
         inputs = (list(filter(lambda x: x[0] != "clk", inputs)))
@@ -195,7 +196,7 @@ class tesbench_creator:
                     prefix = "'h"
 
 
-                dec_string = f"{j[0]} = {bus_width}{prefix}{random_number}"
+                dec_string = f"{j[0]}_tb = {bus_width}{prefix}{random_number}"
                 inputs_vector.append(dec_string)
 
             else :
@@ -213,16 +214,13 @@ class tesbench_creator:
                     prefix = "'h"
 
                 # Decimal
-                dec_string = f"{j[0]} = 1{prefix}{random_number}"
+                dec_string = f"{j[0]}_tb = 1{prefix}{random_number}"
                 inputs_vector.append(dec_string)
-
 
         return(inputs_vector)
 
-
-
     def clock_signal(self):
-        self.find_inputs()
+        #self.find_inputs()
         clock = self.elements["inputs"]  
 
         clock = (list(filter(lambda x: x[0] == "clock", clock)))
@@ -233,11 +231,12 @@ class tesbench_creator:
         else : 
             clock = clock[0][0]
 
-        return(clock)   
+        self.elements['clock'] = clock
 
+        return clock
 
     def reset_signal(self):
-        self.find_inputs()
+        #self.find_inputs()
         reset = self.elements["inputs"]  
 
         reset = (list(filter(lambda x: x[0] == "reset", reset)))
@@ -248,16 +247,18 @@ class tesbench_creator:
         else : 
             reset = reset[0][0]
 
-        return(reset)  
+        self.elements['reset'] =reset
 
+        return reset
 
-
-
-    def tc_create(self):
+    def tb_create(self):
 
         self.find_module()
         self.find_inputs()
         self.find_outputs()
+        self.clock_signal()
+        self.reset_signal()
+        vectores = self.vector_signals()
 
         import os
         name = os.path.splitext(self.path)
@@ -268,7 +269,7 @@ class tesbench_creator:
         for key in self.elements.keys():
 
             if key == "module":
-                tb_module_name = self.elements[key] + "_tb;\n"
+                tb_module_name = f"module {self.elements[key]}_tb;\n"
                 print(tb_module_name)
                 f.write(tb_module_name)
                 connect_ports = f'\n{self.elements[key]} {inst_name} (\n'
@@ -292,11 +293,11 @@ class tesbench_creator:
                         f.write(tb_in_name)
                         connect_ports = connect_ports + f'.{input[0]} ({input[0]}_tb),\n'
 
-
             if key == "outputs":
 
                 flag = len(self.elements[key])
                 last_element = self.elements[key][flag-1]
+
 
                 for output in self.elements[key]:
 
@@ -321,13 +322,30 @@ class tesbench_creator:
                         print(tb_out_name)
                         f.write(tb_out_name)
                         connect_ports = connect_ports + f'.{output[0]} ({output[0]}_tb)\n);'
-                        connect_ports = f'{connect_ports}\ninitial\nbegin\nend\n'
 
 
+        f.write(connect_ports+"\n")
+        f.write(f'\ninitial\n')
+        f.write(f'\n  begin \n\n')
+        f.write(f'    $dumpfile("{self.elements["module"]}_tb.vcd");\n')
+        f.write(f'    $dumpvars(0,"{self.elements["module"]}_tb");\n\n')
+        f.write(f'    {self.elements["clock"]}_tb=0;\n')
+        f.write(f'    {self.elements["reset"]}_tb=0;\n\n')
+        f.write(f'    #1\n')
 
-                f.write(connect_ports+"\n")
-                f.write("\nendmodule")
+        for vector in vectores:
+            generated_vectors = f'    {vector};\n'
+            f.write(generated_vectors)
 
+        f.write(f'\n    $finish\n\n')
+        f.write(f'  end\n\n')
+
+        f.write(f'  always\n')
+        f.write(f'  begin\n')
+        f.write(f'  #1')
+        f.write(f'  {self.elements["clock"]}_tb = ~{self.elements["clock"]}_tb\n')
+        f.write(f'  end\n\n')
+        f.write(f'endmodule')
         f.close()
 
 
@@ -340,8 +358,13 @@ if __name__ == "__main__":
     for file in files:
         creator = tesbench_creator(file)
         print("This file is: ", file)
+<<<<<<< HEAD
         creator.find_outputs()
         creator.clock_signal()
         creator.reset_signal()
         creator.vector_signals()
+=======
+        creator.tb_create()
+        print('\n')
+>>>>>>> fdb1315d21ca0368790e377d5cfe561625eea675
         
