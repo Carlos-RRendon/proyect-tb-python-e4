@@ -5,9 +5,9 @@ reg h2_tb;
 reg f9_tb;
 reg jk_tb;
 reg j99_tb;
+reg clk_tb;
 reg reset_tb;
 reg [31:0] bus_A_tb;
-reg clk_tb;
 reg [6:0] clk_T_tb;
 reg [15:0] module_Bus_B_tb;
 wire wrr_898_tb;
@@ -23,9 +23,9 @@ TOP UUT (
 .f9 (f9_tb),
 .jk (jk_tb),
 .j99 (j99_tb),
+.clk (clk_tb),
 .reset (reset_tb),
 .bus_A (bus_A_tb),
-.clk (clk_tb),
 .clk_T (clk_T_tb),
 .module_Bus_B (module_Bus_B_tb),
 .wrr_898 (wrr_898_tb),
@@ -36,14 +36,6 @@ TOP UUT (
 );
 
 initial
-<<<<<<< HEAD
-begin
-
-
-    
-end
-=======
->>>>>>> fdb1315d21ca0368790e377d5cfe561625eea675
 
   begin 
 
@@ -54,15 +46,15 @@ end
     reset_tb=0;
 
     #1
-    in1_tb = 6'd12;
-    in2_tb = 6'd20;
-    h2_tb = 1'd1;
-    f9_tb = 1'd0;
+    in1_tb = 6'd1;
+    in2_tb = 6'd41;
+    h2_tb = 1'd0;
+    f9_tb = 1'd1;
     jk_tb = 1'd0;
     j99_tb = 1'd1;
-    bus_A_tb = 32'd1563167184;
-    clk_T_tb = 7'd48;
-    module_Bus_B_tb = 16'd36339;
+    bus_A_tb = 32'd363495322;
+    clk_T_tb = 7'd71;
+    module_Bus_B_tb = 16'd53392;
 
     $finish
 

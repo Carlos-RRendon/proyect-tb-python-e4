@@ -359,9 +359,5 @@ if __name__ == "__main__":
         creator = tesbench_creator(file)
         print("This file is: ", file)
 
-
-
         creator.tb_create()
         print('\n')
-
-        
