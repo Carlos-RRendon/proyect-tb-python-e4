@@ -35,7 +35,7 @@ module TOP #(parameter a1=8,	parameter qw=9 ,
   output reg [63:0] d877;
   output reg [31:0] data_rd_T, f459_87_output;
   input [15:0] module_Bus_B;
-  output [1:0] bus_module;
+
   
   wire [31:0] PCResult_T;
   wire [31:0] PCNext_T; 
