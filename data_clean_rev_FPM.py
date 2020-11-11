@@ -164,7 +164,7 @@ class tesbench_creator:
         self.find_inputs()
         inputs = self.elements["inputs"]
 
-        user_format = int(input("Elija el formato de los números (1 decimal), (2 binario), (3 hexadecimal), (4 octal): "))
+        user_format = int(input("Elija el formato de los números (1 decimal), (2 binario), (3 hexadecimal): "))
 
 
         inputs_vector = []
@@ -179,19 +179,39 @@ class tesbench_creator:
                 bus_range = 2 ** bus_width
                 random_number = random.randint(0, (bus_range - 1))
 
-                if user_format = 1 :
-                    # Decimal
-                    dec_string = f"{j[0]} = {bus_width}'d{random_number}"
-                    inputs_vector.append(dec_string)
+                if user_format == 1:
+                    prefix = "'d"
+
+                elif user_format == 2:
+                    random_number = bin(random_number).replace('0b','')
+                    prefix = "'b"
+                elif user_format == 3:
+                    random_number = hex(random_number).replace('0x','')
+                    prefix = "'h"
+
+
+                dec_string = f"{j[0]} = {bus_width}{prefix}{random_number}"
+                inputs_vector.append(dec_string)
+                print(inputs_vector)
 
             else :
 
-                if user_format = 1 
                 random_number = random.randint(0, 1)
 
+                if user_format == 1:
+                    prefix = "'d"
+
+                elif user_format == 2:
+                    random_number = bin(random_number).replace('0b','')
+                    prefix = "'b"
+                elif user_format == 3:
+                    random_number = hex(random_number).replace('0x','')
+                    prefix = "'h"
+
                 # Decimal
-                dec_string = f"{j[0]} = 1'd{random_number}"
+                dec_string = f"{j[0]} = 1{prefix}{random_number}"
                 inputs_vector.append(dec_string)
+                print(inputs_vector)
 
 
 
