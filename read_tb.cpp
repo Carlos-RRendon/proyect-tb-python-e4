@@ -96,7 +96,10 @@ int main()
     // Generation of random vectors
     stringstream hex_stream;
     std::vector<string> key, value;
-    std::string string_input, string_bus, formatted_string, complete_string;
+    std::vector<string> random_vectors; 
+    std::string string_input, string_bus, formatted_string, complete_string, clock_input, reset_input;
+    clock_input.clear();
+    reset_input.clear();
 
     for(std::map<string,string>::iterator i = input.begin(); i != input.end(); ++i) 
     {
@@ -111,11 +114,11 @@ int main()
 
         if ((string_input == "clock") || (string_input == "clk"))
         {
-            int a = 1;
+            clock_input = string_input;
         }
         else if ((string_input == "reset") || (string_input == "rst"))
         {
-            int a = 2;
+            reset_input = string_input;
         }
         else
         {
@@ -139,34 +142,41 @@ int main()
 
                 switch (user_format) //(1 decimal), (2 binary), (3 hexadecimal)
                 {
-                    case 1:
+                    case 1:{
                         formatted_string =  std::to_string(bus_width) + "'d" + std::to_string(random_number);
                         break;
-
-                    case 2:
+                    }
+                        
+                    case 2:{
                         formatted_string = std::bitset<32>(random_number).to_string();
                         formatted_string =  std::to_string(bus_width) + "'b" + formatted_string;
                         break;
+                    }
 
-                    case 3:
+                    case 3:{
                         hex_stream.str(std::string());
                         hex_stream << hex << random_number; 
                         formatted_string = hex_stream.str();
                         formatted_string =  std::to_string(bus_width) + "'h" + formatted_string;
                         break;
+                    }
                 }
 
-                complete_string = string_input + "_tb = " + formatted_string; 
+                complete_string = string_input + "_tb = " + formatted_string + ";"; 
+                random_vectors.push_back(complete_string); 
             }
-                
 
-
-
-
-
+            else 
+            {
+                srand (time(NULL));
+                unsigned long long int random_number = rand() % 2;
+                complete_string = string_input + "_tb = " + std::to_string(random_number) +";";
+                random_vectors.push_back(complete_string); 
+    
+            }
+    
         }      
-          
-        
+            
     }
     
     

@@ -15,7 +15,6 @@ module    TOP (clk_T, data_rd_T, data_in, out_G, clock, clk, rst);
   input rst;
   input [15:0] data_in;
   input [5:0] signal_A;
-  input clock;
   output [31:0] data_rd_T;
   output out_G;
   
