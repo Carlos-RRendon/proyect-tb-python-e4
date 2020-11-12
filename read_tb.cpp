@@ -206,8 +206,24 @@ int main()
 	}
     text_tb.pop_back();
     text_tb += ");\n"
-            "initial\n"
+            "\ninitial\n"
             "\tbegin\n";
+    text_tb += "\n      $dumpfile("+ module_name +".vcd);\n";
+    text_tb += "      $dumpvars(1,"+ module_name+"_TB);\n";
+    text_tb+=  "      " + clock_input + "_tb=0;\n";
+    text_tb+=  "      " + reset_input + "_tb=0;\n\n";
+    for (vector<string>::iterator it= random_vectors.begin();it!= random_vectors.end();it++)
+    {
+        text_tb += "      " + *it + "\n";
+    }
+    text_tb += "\n      $finish\n\n";
+    text_tb += "     end\n\n";
+    text_tb += "    always\n";
+    text_tb += "      begin\n";
+    text_tb += "        #1  ";
+    text_tb += clock_input + "_tb = ~" + clock_input + "_tb\n" ;
+    text_tb += "      end\n\n";
+    text_tb += "endmodule";
 
 
     fstream  outfile;
