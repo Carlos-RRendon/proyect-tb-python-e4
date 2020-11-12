@@ -6,12 +6,18 @@
 `include "alu_des.sv"
 `include "aluC_des.sv"
 `include "div_des.sv"
-module TOP (clk_T, data_rd_T);
+module    TOP (clk_T, data_rd_T, data_in, out_G, clock, clk, rst);
   
   //wire [5:0] func_cod_T;
   //wire [1:0] func_T;
   input clk_T;
+  input clk;
+  input rst;
+  input [15:0] data_in;
+  input [5:0] signal_A;
+  input clock;
   output [31:0] data_rd_T;
+  output out_G;
   
   wire [31:0] PCResult_T;
   wire [31:0] PCNext_T; 
