@@ -46,7 +46,7 @@ int main()
 {
     //map<string, vector<string> > data_tb;
     vector<string> tmp;
-    map<string,string > input, output; 
+    map<string,string> input, output; 
     string module_name;
     string s = open_file();
 

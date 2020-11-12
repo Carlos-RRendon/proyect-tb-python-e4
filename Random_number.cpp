@@ -45,6 +45,5 @@ int main()
      std::cout << "El número hexadecimal es: " << hex_string << endl;
      std::cout << "El número octal es:       " << oct_string << endl;
      std::cout << "El número binario es:     " << bin_string << endl;
-
     
 }
